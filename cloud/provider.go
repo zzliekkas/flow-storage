@@ -224,6 +224,7 @@ func createCOSDriver(config map[string]interface{}) (core.FileSystem, error) {
 
 // 创建GCS驱动（待实现）
 func createGCSDriver(config map[string]interface{}) (core.FileSystem, error) {
+	_ = config
 	return nil, errors.New("cloud: GCS驱动尚未实现")
 }
 
