@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/zzliekkas/flow-storage"
+	storage "github.com/zzliekkas/flow-storage"
 	"github.com/zzliekkas/flow-storage/core"
 )
 
@@ -114,21 +114,14 @@ func RegisterToManager(manager interface{}, cloudManager *CloudManager) error {
 		return errors.New("cloud: 云存储管理器不能为空")
 	}
 
-	// 由于storage包依赖于cloud包，我们需要使用接口类型和反射
-	// 检查manager是否有RegisterDisk方法
-	managerType := fmt.Sprintf("%T", manager)
-	if managerType != "*storage.Manager" {
-		return fmt.Errorf("cloud: 不支持的管理器类型: %s", managerType)
-	}
-
-	// 使用类型断言获取RegisterDisk方法
+	// 使用接口断言检查manager是否实现RegisterDisk方法
 	type DiskRegistrar interface {
-		RegisterDisk(name string, fs interface{})
+		RegisterDisk(name string, fs interface{}) error
 	}
 
 	diskManager, ok := manager.(DiskRegistrar)
 	if !ok {
-		return errors.New("cloud: 管理器不实现RegisterDisk方法")
+		return fmt.Errorf("cloud: 管理器类型 %T 不实现RegisterDisk方法", manager)
 	}
 
 	// 注册所有云存储驱动到存储管理器
@@ -138,7 +131,9 @@ func RegisterToManager(manager interface{}, cloudManager *CloudManager) error {
 			return err
 		}
 		// 直接传递core.FileSystem，让storage.Manager内部处理转换
-		diskManager.RegisterDisk("cloud_"+name, fs)
+		if err := diskManager.RegisterDisk("cloud_"+name, fs); err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -4,8 +4,28 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/zzliekkas/flow-storage/core"
 	"github.com/zzliekkas/flow-storage/local"
 )
+
+// toFileMode safely converts a config value (int, float64, int64) to os.FileMode.
+// Returns 0 if the value is nil or an unsupported type.
+func toFileMode(v interface{}) os.FileMode {
+	switch n := v.(type) {
+	case int:
+		return os.FileMode(n)
+	case int64:
+		return os.FileMode(n)
+	case float64:
+		return os.FileMode(int(n))
+	default:
+		return 0
+	}
+}
+
+// ImportCloudDrivers is a no-op function. Import "github.com/zzliekkas/flow-storage/cloud"
+// to automatically register cloud storage drivers (s3, oss, cos, qiniu).
+func ImportCloudDrivers() {}
 
 // StorageConfig 文件存储系统配置
 type StorageConfig struct {
@@ -67,7 +87,9 @@ func (p *Provider) Build() (*Manager, *Uploader, error) {
 			return nil, nil, err
 		}
 
-		manager.RegisterDisk(name, disk)
+		if err := manager.RegisterDisk(name, disk); err != nil {
+			return nil, nil, err
+		}
 	}
 
 	if p.config.DefaultDisk != "" {
@@ -94,17 +116,17 @@ func (p *Provider) createDisk(config DiskConfig) (FileSystem, error) {
 		if baseURL, ok := config.Config["base_url"].(string); ok {
 			localConfig.BaseURL = baseURL
 		}
-		if filePerms, ok := config.Config["file_permissions"].(int); ok {
-			localConfig.FilePermissions = os.FileMode(filePerms)
+		if v := toFileMode(config.Config["file_permissions"]); v != 0 {
+			localConfig.FilePermissions = v
 		}
-		if dirPerms, ok := config.Config["directory_permissions"].(int); ok {
-			localConfig.DirectoryPermissions = os.FileMode(dirPerms)
+		if v := toFileMode(config.Config["directory_permissions"]); v != 0 {
+			localConfig.DirectoryPermissions = v
 		}
-		if publicPerms, ok := config.Config["public_permissions"].(int); ok {
-			localConfig.PublicPermissions = os.FileMode(publicPerms)
+		if v := toFileMode(config.Config["public_permissions"]); v != 0 {
+			localConfig.PublicPermissions = v
 		}
-		if privatePerms, ok := config.Config["private_permissions"].(int); ok {
-			localConfig.PrivatePermissions = os.FileMode(privatePerms)
+		if v := toFileMode(config.Config["private_permissions"]); v != 0 {
+			localConfig.PrivatePermissions = v
 		}
 
 		// 创建本地文件系统驱动
@@ -116,11 +138,15 @@ func (p *Provider) createDisk(config DiskConfig) (FileSystem, error) {
 		// 使用适配器将core.FileSystem转换为storage.FileSystem
 		return &FileSystemAdapter{CoreFS: fs}, nil
 
-	// 可以在这里添加更多的驱动类型
-	// case "s3":
-	//     return createS3Disk(config.Config)
-
 	default:
+		// 检查注册的驱动工厂
+		if factory := core.GetDriverFactory(config.Driver); factory != nil {
+			coreFS, err := factory(config.Config)
+			if err != nil {
+				return nil, err
+			}
+			return &FileSystemAdapter{CoreFS: coreFS}, nil
+		}
 		return nil, fmt.Errorf("不支持的驱动类型: %s", config.Driver)
 	}
 }

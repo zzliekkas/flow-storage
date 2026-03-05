@@ -44,10 +44,14 @@ func (m *Manager) Disk(name string) (FileSystem, error) {
 
 // DefaultDisk 获取默认文件系统驱动
 func (m *Manager) DefaultDisk() (FileSystem, error) {
-	if m.defaultDisk == "" {
+	m.mu.RLock()
+	name := m.defaultDisk
+	m.mu.RUnlock()
+
+	if name == "" {
 		return nil, fmt.Errorf("storage: 未设置默认磁盘")
 	}
-	return m.Disk(m.defaultDisk)
+	return m.Disk(name)
 }
 
 // SetDefaultDisk 设置默认文件系统驱动
@@ -65,26 +69,25 @@ func (m *Manager) SetDefaultDisk(name string) error {
 }
 
 // RegisterDisk 注册存储驱动
-func (m *Manager) RegisterDisk(name string, fs interface{}) {
+func (m *Manager) RegisterDisk(name string, fs interface{}) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	// 支持不同类型的文件系统注册
 	switch v := fs.(type) {
 	case FileSystem:
-		// 如果已经是storage.FileSystem，直接使用
 		m.disks[name] = v
 	case core.FileSystem:
-		// 如果是core.FileSystem，使用适配器转换
 		m.disks[name] = &FileSystemAdapter{CoreFS: v}
 	default:
-		panic(fmt.Sprintf("不支持的文件系统类型: %T", fs))
+		return fmt.Errorf("storage: 不支持的文件系统类型: %T", fs)
 	}
 
 	// 如果是第一个注册的驱动，将其设为默认
 	if m.defaultDisk == "" {
 		m.defaultDisk = name
 	}
+	return nil
 }
 
 // UnregisterDisk 注销文件系统驱动
