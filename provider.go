@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/zzliekkas/flow/v2/di"
 	"github.com/zzliekkas/flow-storage/local"
 )
 
@@ -58,44 +57,27 @@ func DefaultConfig() StorageConfig {
 	}
 }
 
-// Register 注册服务
-func (p *Provider) Register(container *di.Container) error {
-	// 注册存储管理器
+// Build 构建文件存储系统服务
+func (p *Provider) Build() (*Manager, *Uploader, error) {
 	manager := NewManager()
 
-	// 创建并注册磁盘
 	for name, diskConfig := range p.config.Disks {
 		disk, err := p.createDisk(diskConfig)
 		if err != nil {
-			return err
+			return nil, nil, err
 		}
 
 		manager.RegisterDisk(name, disk)
 	}
 
-	// 设置默认磁盘
 	if p.config.DefaultDisk != "" {
 		if err := manager.SetDefaultDisk(p.config.DefaultDisk); err != nil {
-			return err
+			return nil, nil, err
 		}
 	}
 
-	// 注册到容器
-	container.Provide(func() *Manager {
-		return manager
-	})
-
-	// 注册文件上传助手
-	container.Provide(func() *Uploader {
-		return NewUploader(manager)
-	})
-
-	return nil
-}
-
-// Boot 启动服务
-func (p *Provider) Boot(container *di.Container) error {
-	return nil
+	uploader := NewUploader(manager)
+	return manager, uploader, nil
 }
 
 // createDisk 创建磁盘

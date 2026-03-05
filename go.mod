@@ -13,7 +13,6 @@ require (
 	github.com/disintegration/imaging v1.6.2
 	github.com/qiniu/go-sdk/v7 v7.25.3
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.65
-	github.com/zzliekkas/flow/v2 v2.0.0
 )
 
 require (
@@ -39,12 +38,9 @@ require (
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mozillazg/go-httpheader v0.4.0 // indirect
-	go.uber.org/dig v1.17.0 // indirect
 	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/time v0.1.0 // indirect
 	modernc.org/fileutil v1.0.0 // indirect
 )
-
-replace github.com/zzliekkas/flow/v2 => ../flow
