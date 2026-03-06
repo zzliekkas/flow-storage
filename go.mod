@@ -93,5 +93,3 @@ require (
 	gorm.io/gorm v1.25.12 // indirect
 	modernc.org/fileutil v1.0.0 // indirect
 )
-
-replace github.com/zzliekkas/flow/v2 => ../flow
