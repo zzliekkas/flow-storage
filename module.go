@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"github.com/zzliekkas/flow/v2"
+	"github.com/zzliekkas/flow/v3"
 )
 
 // StorageModule implements flow.Module for easy registration into a Flow engine.

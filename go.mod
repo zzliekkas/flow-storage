@@ -13,7 +13,7 @@ require (
 	github.com/disintegration/imaging v1.6.2
 	github.com/qiniu/go-sdk/v7 v7.25.3
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.65
-	github.com/zzliekkas/flow/v2 v2.0.0
+	github.com/zzliekkas/flow/v3 v3.0.0
 )
 
 require (
