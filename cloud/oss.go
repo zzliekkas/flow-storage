@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/zzliekkas/flow-storage"
+	"github.com/zzliekkas/flow-storage/v3"
 )
 
 // OSSConfig 阿里云OSS配置选项

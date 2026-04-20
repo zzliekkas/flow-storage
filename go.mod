@@ -1,4 +1,4 @@
-module github.com/zzliekkas/flow-storage
+module github.com/zzliekkas/flow-storage/v3
 
 go 1.23.0
 

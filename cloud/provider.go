@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"sync"
 
-	storage "github.com/zzliekkas/flow-storage"
-	"github.com/zzliekkas/flow-storage/core"
+	storage "github.com/zzliekkas/flow-storage/v3"
+	"github.com/zzliekkas/flow-storage/v3/core"
 )
 
 // Provider 云存储提供者接口

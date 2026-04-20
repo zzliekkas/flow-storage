@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/zzliekkas/flow-storage/core"
-	"github.com/zzliekkas/flow-storage/local"
+	"github.com/zzliekkas/flow-storage/v3/core"
+	"github.com/zzliekkas/flow-storage/v3/local"
 )
 
 // toFileMode safely converts a config value (int, float64, int64) to os.FileMode.
@@ -23,7 +23,7 @@ func toFileMode(v interface{}) os.FileMode {
 	}
 }
 
-// ImportCloudDrivers is a no-op function. Import "github.com/zzliekkas/flow-storage/cloud"
+// ImportCloudDrivers is a no-op function. Import "github.com/zzliekkas/flow-storage/v3/cloud"
 // to automatically register cloud storage drivers (s3, oss, cos, qiniu).
 func ImportCloudDrivers() {}
 

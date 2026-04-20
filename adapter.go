@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/zzliekkas/flow-storage/core"
+	"github.com/zzliekkas/flow-storage/v3/core"
 )
 
 // FileAdapter 适配器，用于将core.File转换为storage.File

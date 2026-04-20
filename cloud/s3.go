@@ -16,8 +16,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/zzliekkas/flow-storage"
-	"github.com/zzliekkas/flow-storage/core"
+	"github.com/zzliekkas/flow-storage/v3"
+	"github.com/zzliekkas/flow-storage/v3/core"
 )
 
 // S3Config S3配置选项

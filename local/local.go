@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zzliekkas/flow-storage/core"
+	"github.com/zzliekkas/flow-storage/v3/core"
 )
 
 // LocalFile 表示本地文件系统中的文件

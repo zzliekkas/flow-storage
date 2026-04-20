@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/tencentyun/cos-go-sdk-v5"
-	"github.com/zzliekkas/flow-storage/core"
+	"github.com/zzliekkas/flow-storage/v3/core"
 )
 
 // COSConfig 腾讯云对象存储配置

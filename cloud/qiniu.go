@@ -8,7 +8,7 @@ import (
 
 	qiniuauth "github.com/qiniu/go-sdk/v7/auth/qbox"
 	qiniustorage "github.com/qiniu/go-sdk/v7/storage"
-	"github.com/zzliekkas/flow-storage"
+	"github.com/zzliekkas/flow-storage/v3"
 )
 
 // QiniuConfig 七牛云配置

@@ -1,7 +1,7 @@
 package cloud
 
 import (
-	"github.com/zzliekkas/flow-storage/core"
+	"github.com/zzliekkas/flow-storage/v3/core"
 )
 
 func init() {
