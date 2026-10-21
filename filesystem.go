@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"errors"
 	"io"
 	"os"
 	"time"
@@ -14,6 +15,11 @@ var (
 	ErrInvalidPath       = os.ErrInvalid
 	ErrDirectoryNotEmpty = os.ErrExist
 	ErrFileAlreadyExists = os.ErrExist
+
+	// ErrVisibilityNotSupported 后端不支持对象级可见性。
+	// 典型场景：七牛云只有空间（Bucket）级 ACL，无法对单个对象设置 public/private，
+	// 调用方需要改用独立空间（公开空间 / 私有空间）来区分。
+	ErrVisibilityNotSupported = errors.New("storage: object-level visibility is not supported by this backend")
 )
 
 // File 表示一个文件对象

@@ -263,7 +263,3 @@ func getBoolValue(config map[string]interface{}, key string, defaultValue bool) 
 	}
 	return defaultValue
 }
-
-func (fs *QiniuFileSystem) AllDirectories(ctx context.Context, directory string) ([]string, error) {
-	return nil, nil
-}
